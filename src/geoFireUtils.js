@@ -438,12 +438,14 @@ function encodeGeoFireObject(location, geohash) {
  * Decodes the location given as GeoFire object. Returns null if decoding fails.
  *
  * @param {Object} geoFireObj The location encoded as GeoFire object.
- * @return {?Array.<number>} location The location as [latitude, longitude] pair or null if
+ * @return {?Array|Object.<number> ||} location The location as [latitude, longitude] pair or null if
  * decoding fails.
  */
 function decodeGeoFireObject(geoFireObj) {
   if (geoFireObj !== null && geoFireObj.hasOwnProperty("l") && Array.isArray(geoFireObj.l) && geoFireObj.l.length === 2) {
     return geoFireObj.l;
+  } else if (geoFireObj !== null && geoFireObj.hasOwnProperty("l") && typeof geoFireObj.l === "object" && geoFireObj.l["0"] && geoFireObj.l["1"]) {
+    return [geoFireObj.l["0"], geoFireObj.l["1"]];
   } else {
     throw new Error("Unexpected GeoFire location object encountered: " + JSON.stringify(geoFireObj));
   }
